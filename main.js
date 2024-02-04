@@ -36,7 +36,7 @@ const by_guide = {
     "Vivec" : {"Ald'ruhn": 0, "Balmora" : 0, "Caldera" : 0, "Sadrith Mora" : 0},
 };
 
-function dijkstra(graphs, start) {
+function dijkstra(graphs, start, use_weight) {
     let distances = {};
     let predecessors = {};
     let visited = new Set();
@@ -69,7 +69,8 @@ function dijkstra(graphs, start) {
                 if (visited.has(neighbor))
                     continue;
                 let distance = graph[closest][neighbor];
-                let new_distance = distances[closest] + distance;
+                let weight = use_weight ? distance : 1;
+                let new_distance = distances[closest] + weight;
                 if (new_distance < distances[neighbor]) {
                     distances[neighbor] = new_distance;
                     predecessors[neighbor] = {place: closest, method: method, time: distance};
@@ -84,10 +85,11 @@ function dijkstra(graphs, start) {
 function get_route() {
     var src_choice = document.getElementById("src-choice").value;
     var dst_choice = document.getElementById("dst-choice").value;
+    var use_weight = document.getElementById("time").checked;
 
     routes = {"Boat" : by_boat, "Silt Strider": by_silt_strider, "Guild Guide": by_guide};
 
-    [distances, preds] = dijkstra(routes, src_choice);
+    [distances, preds] = dijkstra(routes, src_choice, use_weight);
 
     route = []
     for (let cur = {place: dst_choice, method: null}; cur != null; cur = preds[cur.place]) {

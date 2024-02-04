@@ -14,6 +14,11 @@
         <datalist id="dst">
         </datalist>
         <br/>
+        Weight by:<br/>
+        <input type="radio" id="stops" name="metric" value="stops">
+        <label for="stops">Stops</label><br>
+        <input type="radio" id="time" name="metric" value="time" checked="checked">
+        <label for="time">Time</label><br>
         <button onclick="get_route()">Go</button>
         <div>
              <h2>Itinerary</h2>
