@@ -17,15 +17,23 @@ const by_boat = {
 };
 
 const by_silt_strider = {
-    "Ald'ruhn":	{"Balmora" : 4, "Gnisis" : 4, "Khuul" : 5, "Maar Gan" : 2},
-    "Balmora":	{"Ald'ruhn" : 4, "Seyda Neen" : 3, "Suran" : 5, "Vivec" : 4},
-    "Gnisis":	{"Ald'ruhn" : 4, "Khuul" : 3, "Maar Gan" : 4, "Seyda Neen" : 11},
-    "Khuul":	{"Ald'ruhn" : 5, "Gnisis" : 3, "Maar Gan" : 3},
-    "Maar Gan":	{"Ald'ruhn" : 2, "Gnisis" : 4, "Khuul" : 3},
-    "Molag Mar":	{"Suran" : 3, "Vivec" : 4},
-    "Seyda Neen":	{"Balmora" : 3, "Gnisis" : 11, "Suran" : 4, "Vivec" : 2},
-    "Suran":	{"Balmora" : 4, "Molag Mar" : 3, "Seyda Neen" : 4, "Vivec" : 1},
-    "Vivec":	{"Balmora" : 4, "Molag Mar" : 4, "Seyda Neen" : 2, "Suran" : 1}
+    "Ald'ruhn" : {"Balmora" : 4, "Gnisis" : 4, "Khuul" : 5, "Maar Gan" : 2},
+    "Balmora" :	{"Ald'ruhn" : 4, "Seyda Neen" : 3, "Suran" : 5, "Vivec" : 4},
+    "Gnisis" : {"Ald'ruhn" : 4, "Khuul" : 3, "Maar Gan" : 4, "Seyda Neen" : 11},
+    "Khuul" : {"Ald'ruhn" : 5, "Gnisis" : 3, "Maar Gan" : 3},
+    "Maar Gan" : {"Ald'ruhn" : 2, "Gnisis" : 4, "Khuul" : 3},
+    "Molag Mar" : {"Suran" : 3, "Vivec" : 4},
+    "Seyda Neen" : {"Balmora" : 3, "Gnisis" : 11, "Suran" : 4, "Vivec" : 2},
+    "Suran" : {"Balmora" : 4, "Molag Mar" : 3, "Seyda Neen" : 4, "Vivec" : 1},
+    "Vivec" : {"Balmora" : 4, "Molag Mar" : 4, "Seyda Neen" : 2, "Suran" : 1}
+};
+
+const by_guide = {
+    "Ald'ruhn":	{"Balmora" : 0, "Caldera" : 0, "Sadrith Mora" : 0, "Vivec" : 0},
+    "Balmora":{"Ald'ruhn": 0, "Caldera" : 0, "Sadrith Mora" : 0, "Vivec" : 0},
+    "Caldera": {"Ald'ruhn": 0, "Balmora" : 0, "Sadrith Mora" : 0, "Vivec" : 0},
+    "Sadrith Mora" : {"Ald'ruhn": 0, "Balmora" : 0, "Caldera" : 0, "Vivec" : 0},
+    "Vivec" : {"Ald'ruhn": 0, "Balmora" : 0, "Caldera" : 0, "Sadrith Mora" : 0},
 };
 
 function dijkstra(graphs, start) {
@@ -77,7 +85,7 @@ function get_route() {
     var src_choice = document.getElementById("src-choice").value;
     var dst_choice = document.getElementById("dst-choice").value;
 
-    routes = {"Boat" : by_boat, "Silt Strider": by_silt_strider};
+    routes = {"Boat" : by_boat, "Silt Strider": by_silt_strider, "Guild Guide": by_guide};
 
     [distances, preds] = dijkstra(routes, src_choice);
 
@@ -105,6 +113,9 @@ function main() {
         places.add(place);
 
     for (const place of Object.keys(by_silt_strider))
+        places.add(place);
+
+    for (const place of Object.keys(by_guide))
         places.add(place);
 
     for (const place of [...places].sort()) {
