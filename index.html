@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <script src="main.js"></script>
+    </head>
+    <body>
+        <label for="src-choice">From:</label>
+        <input list="src" id="src-choice" name="src-choice" autoComplete="on"/>
+        <datalist id="src">
+        </datalist>
+        <br/>
+        <label for="dst-choice">To:</label>
+        <input list="dst" id="dst-choice" name="dst-choice"/>
+        <datalist id="dst">
+        </datalist>
+        <button onclick="get_route()">Go</button>
+        <ul id="route">
+        </ul>
+    </body>
+</html>
