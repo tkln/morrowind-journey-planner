@@ -94,10 +94,11 @@ function get_route() {
     route = []
     total = 0
     for (let cur = {place: dst_choice, method: null}; cur != null; cur = preds[cur.place]) {
-        if (cur.method != null)
+        if (cur.method != null) {
             route.push(cur.method + " (" + cur.time + "h)");
+            total += cur.time;
+        }
         route.push("<b>" + cur.place + "</b>");
-        total += cur.time;
     }
 
     var itinerary =document.getElementById("itinerary");
@@ -110,8 +111,10 @@ function get_route() {
     }
     h2 = document.createElement('h2');
     h2.innerHTML = "Itinerary";
+    total_text = document.createTextNode("Total: " + total + "h")
     itinerary.appendChild(h2);
     itinerary.appendChild(route_list);
+    itinerary.appendChild(total_text);
 }
 
 function main() {
