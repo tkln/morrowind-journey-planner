@@ -3,6 +3,7 @@
         <script src="main.js"></script>
     </head>
     <body>
+        <h1>Vvardenfell Public Transport Journey Planner</h1>
         <label for="src-choice">From:</label>
         <input list="src" id="src-choice" name="src-choice" autoComplete="on"/>
         <datalist id="src">
@@ -12,8 +13,12 @@
         <input list="dst" id="dst-choice" name="dst-choice"/>
         <datalist id="dst">
         </datalist>
+        <br/>
         <button onclick="get_route()">Go</button>
-        <ul id="route">
-        </ul>
+        <div>
+             <h2>Itinerary</h2>
+             <ul id="route">
+            </ul>
+        </div>
     </body>
 </html>
