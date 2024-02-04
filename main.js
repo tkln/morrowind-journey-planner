@@ -92,18 +92,26 @@ function get_route() {
     [distances, preds] = dijkstra(routes, src_choice, use_weight);
 
     route = []
+    total = 0
     for (let cur = {place: dst_choice, method: null}; cur != null; cur = preds[cur.place]) {
         if (cur.method != null)
             route.push(cur.method + " (" + cur.time + "h)");
-        route.push(cur.place);
+        route.push("<b>" + cur.place + "</b>");
+        total += cur.time;
     }
 
-    var route_list = document.getElementById("route");
+    var itinerary =document.getElementById("itinerary");
+    itinerary.innerHTML = '';
+    var route_list = document.createElement('ul');
     for (const place of route.reverse()) {
         var option = document.createElement('li');
         option.innerHTML = place;
         route_list.appendChild(option);
     }
+    h2 = document.createElement('h2');
+    h2.innerHTML = "Itinerary";
+    itinerary.appendChild(h2);
+    itinerary.appendChild(route_list);
 }
 
 function main() {
