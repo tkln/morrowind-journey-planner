@@ -16,11 +16,24 @@ const by_boat = {
     "Vos" : {"Sadrith Mora" : 5, "Tel Aruhn" : 4, "Tel Mora" : 0},
 };
 
-function dijkstra(graph, start) {
+const by_silt_strider = {
+    "Ald'ruhn":	{"Balmora" : 4, "Gnisis" : 4, "Khuul" : 5, "Maar Gan" : 2},
+    "Balmora":	{"Ald'ruhn" : 4, "Seyda Neen" : 3, "Suran" : 5, "Vivec" : 4},
+    "Gnisis":	{"Ald'ruhn" : 4, "Khuul" : 3, "Maar Gan" : 4, "Seyda Neen" : 11},
+    "Khuul":	{"Ald'ruhn" : 5, "Gnisis" : 3, "Maar Gan" : 3},
+    "Maar Gan":	{"Ald'ruhn" : 2, "Gnisis" : 4, "Khuul" : 3},
+    "Molag Mar":	{"Suran" : 3, "Vivec" : 4},
+    "Seyda Neen":	{"Balmora" : 3, "Gnisis" : 11, "Suran" : 4, "Vivec" : 2},
+    "Suran":	{"Balmora" : 4, "Molag Mar" : 3, "Seyda Neen" : 4, "Vivec" : 1},
+    "Vivec":	{"Balmora" : 4, "Molag Mar" : 4, "Seyda Neen" : 2, "Suran" : 1}
+};
+
+function dijkstra(graph_a, graph_b, start) {
     let distances = {};
     let predecessors = {};
     let visited = new Set();
-    let nodes = Object.keys(graph);
+    let nodes = Object.keys(graph_a).concat(Object.keys(graph_b));
+    console.log(nodes);
     for (let node of nodes) {
         distances[node] = Infinity;
         predecessors[node] = null;
@@ -37,13 +50,24 @@ function dijkstra(graph, start) {
 
         visited.add(closest);
 
-        for (let neighbor in graph[closest]) {
+        for (let neighbor in graph_a[closest]) {
             if (visited.has(neighbor))
                 continue;
-            let new_distance = distances[closest] + graph[closest][neighbor];
+            let distance = graph_a[closest][neighbor];
+            let new_distance = distances[closest] + distance;
             if (new_distance < distances[neighbor]) {
                 distances[neighbor] = new_distance;
-                predecessors[neighbor] = closest;
+                predecessors[neighbor] = {place: closest, method: "Boat", time: distance};
+            }
+        }
+        for (let neighbor in graph_b[closest]) {
+            if (visited.has(neighbor))
+                continue;
+            let distance = graph_b[closest][neighbor];
+            let new_distance = distances[closest] + distance;
+            if (new_distance < distances[neighbor]) {
+                distances[neighbor] = new_distance;
+                predecessors[neighbor] = {place: closest, method: "Silt Strider", time: distance};
             }
         }
     }
@@ -54,13 +78,15 @@ function get_route() {
     var src_choice = document.getElementById("src-choice").value;
     var dst_choice = document.getElementById("dst-choice").value;
     console.log("Click");
-    console.log(src_choice);
-    [distances, preds] = dijkstra(by_boat, src_choice);
-    console.log(distances);
-    console.log(preds);
+    //console.log(src_choice);
+    [distances, preds] = dijkstra(by_boat, by_silt_strider , src_choice);
+    //console.log(distances);
+    //console.log(preds);
     route = []
-    for (let cur = dst_choice; cur != null; cur = preds[cur]) {
-        route.push(cur);
+    for (let cur = {place: dst_choice, method: null}; cur != null; cur = preds[cur.place]) {
+        if (cur.method != null)
+            route.push(cur.method + " (" + cur.time + "h)");
+        route.push(cur.place);
     }
 
     var route_list = document.getElementById("route");
@@ -74,7 +100,15 @@ function get_route() {
 function main() {
     var src_choice = document.getElementById("src");
     var dst_choice = document.getElementById("dst");
-    for (const place of Object.keys(by_boat)) {
+
+    places = new Set();
+    for (const place of Object.keys(by_boat))
+        places.add(place);
+
+    for (const place of Object.keys(by_silt_strider))
+        places.add(place);
+
+    for (const place of [...places].sort()) {
         console.log(src_choice);
         {
             var option = document.createElement('option');
